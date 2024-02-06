@@ -24,3 +24,7 @@ class IndexView(View):
                 "sql_query": sql_query,
             },
         )
+
+class LoginView(View):
+    def get(self, request):
+        return render(request, "sqltranslator/login_traktid.html")
