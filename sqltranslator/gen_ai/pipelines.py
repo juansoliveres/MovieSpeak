@@ -48,7 +48,6 @@ def pipeline(input_query: str) -> Tuple[str, bool, str, str]:
         # extract_sql=True,
     )
 
-    # VER QUE TIPO DE VARIABLE DEVUELVE LA FUNCION PARA EJECUTAR LAS QUERIES EN BIGQUERY
     final_response, is_valid, sql_query = query_mysql(reference_sql)
 
     return final_response, is_valid, sql_query, prompt

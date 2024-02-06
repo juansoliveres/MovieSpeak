@@ -113,5 +113,3 @@ def add_movie_details1(title_imdbid):
     final_df = pd.concat([title_imdbid,movie_df],axis = 1)
     print(final_df.head())
     return final_df
-
-
