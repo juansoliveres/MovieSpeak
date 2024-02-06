@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <title>VertiAI</title>
+    <script>
+        function openSQLPopup() {
+            document.getElementById("sql-popup").style.display = "block";
+        }
+        function closeSQLPopup() {
+            document.getElementById("sql-popup").style.display = "none";
+        }
+        function clearOutput() {
+            document.getElementById("output_text").value = "";
+        }
+        function showPopUpMessage(event) {
+            var popUpMessage = document.getElementById("pop-up-message");
+            popUpMessage.style.display = "block";
+            popUpMessage.style.left = event.clientX + "px";
+            popUpMessage.style.top = event.clientY + "px";
+            setTimeout(function () {
+                hidePopUpMessage();
+            }, 2000);
+        }
+        function hidePopUpMessage() {
+            var popUpMessage = document.getElementById("pop-up-message");
+            popUpMessage.style.display = "none";
+        }
+    </script>
+</head>
+
+<body>
+    <h1 style="text-align:center;">Natural Language Questions</h1>
+    <form method="post" action="{% url 'index' %}">
+        {% csrf_token %}
+        <label for="input_text">Input Text:</label><br>
+        <textarea id="input_text" name="input_text" rows="4" cols="50" onmousemove="showPopUpMessage(event)"
+            onmouseleave="hidePopUpMessage()">{{ input_text }}</textarea><br><br>
+        <button type="submit">Submit</button>
+        <button type="button" onclick="clearOutput()">Clear Response</button>
+        <button type="button" style="position: relative; left: 50px;" onclick="openSQLPopup()">Show SQL</button>
+        -
+        <div id="sql-popup" class="sql-popup">
+            <h2>SQL</h2>{{ sql_query }}<button type="button" class="close-button" onclick="closeSQLPopup()">OK</button>
+        </div>
+
+
+    </form>
+    <br>
+    <label for="output_text">Response:</label><br>
+    <textarea id="output_text" name="output_text" rows="4" cols="50" readonly {% if is_valid %}{% else %}
+        style="color:red" {% endif %}>{{ output_text }}</textarea>
+
+    <div id="pop-up-message">Enter your question here in natural language.</div>
+</body>
+
+</html>
