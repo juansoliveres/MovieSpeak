@@ -61,7 +61,7 @@ If the reference SQL is not correct, output the fixed SQL.
 """
 
 BIGQUERY_SQL = """\
-I have a table called 'movies2' in MySQL. This is the schema of the table as described by MySQL:
+I have a table called {{ trakt_username }} in MySQL. This is the schema of the table as described by MySQL:
 {{ schema }}
 I will give you a question asked in a natural language, and you will traduce that question into a MySQL code and nothing else, based on the schema of the table.
 ============

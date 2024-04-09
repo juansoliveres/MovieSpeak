@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-{% load static %}
 <html>
-
-<h1> THIS IS MY FIRST TRIAL</h1>
+<head>
+    <title>Trakt Username Input</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <label for="trakt_username">Trakt Username:</label>
+        <input type="text" id="trakt_username" name="trakt_username" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

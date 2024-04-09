@@ -1,7 +1,7 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from sqltranslator.actions import _run_sql_pipeline
+from sqltranslator.actions import _run_sql_pipeline, run_login_pipeline
 
 class IndexView(View):
     def get(self, request):
@@ -28,3 +28,17 @@ class IndexView(View):
 class LoginView(View):
     def get(self, request):
         return render(request, "sqltranslator/login_traktid.html")
+
+    def post(self, request):
+        # Extract the Trakt username from the POST request
+        trakt_username = request.POST.get("trakt_username")
+
+        # Run part of the processing with the Trakt username
+        run_login_pipeline(trakt_username)
+
+        request.session['trakt_username'] = trakt_username
+
+        # Store the processed data in the session or pass it to the next view as needed 
+        # Redirect to the IndexView with the processed data
+        # Note: You might need to adapt this depending on how you plan to use the data
+        return redirect('index')  # Ensure you have a URL named 'index_view_url_name' pointing to IndexView

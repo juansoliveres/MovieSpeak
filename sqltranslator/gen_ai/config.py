@@ -16,4 +16,6 @@ MYSQL_ENGINE_URL = "mysql+mysqlconnector://root:mysqlPasswordy67@localhost:3306/
 
 GPT3_5 = "gpt-3.5-turbo-1106"
 
-OPENAI_API_KEY = "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"
+#OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
+# 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

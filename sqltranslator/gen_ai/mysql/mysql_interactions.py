@@ -83,7 +83,9 @@ def get_full_table_schema(sqlquery):
     """
     Retrieves the full schema of a table from a MySQL database.
 
-    This function connects to a MySQL database using a predefined MySQL engine. It executes the provided SQL query, usually a 'SHOW CREATE TABLE' statement, to fetch the schema of a specified table. The results are returned as rows and concatenated into a single string to represent the complete schema of the table.
+    This function connects to a MySQL database using a predefined MySQL engine. It executes the provided SQL query, 
+    usually a 'SHOW CREATE TABLE' statement, to fetch the schema of a specified table. The results are returned 
+    as rows and concatenated into a single string to represent the complete schema of the table.
 
     Args
     ----

@@ -8,6 +8,7 @@ from sqltranslator.gen_ai.prompt.templates import BIGQUERY_SQL
 def prompt_sql_generator(
     question: str,
     text_examples: str,
+    trakt_username: str, 
     #file_examples: Union[Dict[str, str], List[Dict[str, str]], None] = None,
     input_sep: str = DEFAULT_EXAMPLES_SEPARATOR,
     # context_type: Union[Literal["examples"], Literal["schema"]] = "examples",
@@ -54,6 +55,7 @@ def prompt_sql_generator(
     context = {
         "question": question,
         "schema": text_examples,
+        "trakt_username": trakt_username,
         }
     result = template.render(context)
     return result

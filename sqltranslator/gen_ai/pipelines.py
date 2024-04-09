@@ -1,13 +1,18 @@
 import requests
 import json
+import asyncio
+import aiohttp
+import logging
+
 from typing import Dict, List, Literal, Optional, Tuple, Union
 from sqltranslator.gen_ai.config import HEADERS, OPENAI_API_KEY
 from sqltranslator.gen_ai.trakt.trakt_functions import read_trakt_history, select_title_and_id, add_movie_details1
+from sqltranslator.gen_ai.trakt.trakt_functions_optimized import retrieve_trakt_history, main
 from sqltranslator.gen_ai.gpt.textgeneration import TextGeneratorGPT3_5
 from sqltranslator.gen_ai.mysql.mysql_interactions import send_df_to_mysql, query_mysql, get_full_table_schema
 from openai import OpenAI
 
-def pipeline(input_query: str) -> Tuple[str, bool, str, str]:
+def pipeline(input_query: str, trakt_username: str) -> Tuple[str, bool, str, str]:
     """
     This function takes an input query in natural language and returns
     the results of a SQL query executed on MySQL.
@@ -29,22 +34,15 @@ def pipeline(input_query: str) -> Tuple[str, bool, str, str]:
     - `sql` (str): The SQL query itself.
     - `prompt` (str): The final prompt passed to the LLM model.
     """
-    # Retrieving user's trakt history. When view is ready change juan_trakt by user_name
-    trakt_history = read_trakt_history('juan_trakt') 
-    # Selecting the values in which we are interested (title and id) from the trakt_history file
-    title_imdbid = select_title_and_id(trakt_history)
-    # Add movie details to the list of movies
-    final_df = add_movie_details1(title_imdbid)
-    # Send created dataframe to MySQL DB
-    send_df_to_mysql(final_df, 'juan_trakt')
     # Retrieve the schema from the table in MySQL
-    text_examples = get_full_table_schema('show create table test.movies2;')
+    text_examples = get_full_table_schema('show create table test.juan_trakt;')
     print(text_examples)
     # Instantiate the predictor model
     model = TextGeneratorGPT3_5(OPENAI_API_KEY)
     reference_sql, prompt = model.predict_sql(
         text=input_query,
         text_examples=text_examples,
+        trakt_username = trakt_username,
         # extract_sql=True,
     )
 
@@ -52,7 +50,63 @@ def pipeline(input_query: str) -> Tuple[str, bool, str, str]:
 
     return final_response, is_valid, sql_query, prompt
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
+def pipelines_login(trakt_username: str) -> Tuple[str, bool, str, str]:
+    """
+    Processes a Trakt user's watch history to generate and store relevant movie data in a MySQL database.
+    This function performs several steps to process and utilize a user's watch history from Trakt. 
+    It first retrieves the watch history for the given username, then selects specific details (title and IMDb ID) 
+    from this data. Next, it enriches this list with additional movie details through an external API call or database. 
+    This enriched data is then formatted into a DataFrame, which is subsequently sent to a MySQL database for storage.
+    Lastly, it prints a confirmation message upon successful execution.
+    
+    The process assumes that the Trakt history is available and accessible, and that the MySQL database is set up to 
+    receive and store the data. It also assumes the existence of functions for data retrieval, processing, and database communication.
 
+    Args:
+    ----
+    - `trakt_username` (str): The Trakt username for which to process the watch history.
 
+    Returns:
+    -------
+    - `message` (str): A confirmation message indicating the outcome of the database operation.
+    - `is_valid` (bool): Indicates whether the database operation was successful.
+    - `user_data` (str): Processed user data that was sent to the MySQL database.
+    - `additional_info` (str): Any additional information or context about the operation.
 
+    Note:
+    -----
+    This function is a high-level overview of processing a user's watch history from Trakt. 
+    Implementers should ensure that all called functions (`read_trakt_history`, `select_title_and_id`, 
+    `add_movie_details1`, `send_df_to_mysql`) are defined and properly handle errors and exceptions 
+    that may arise during their execution.
+    """
+    try:
+        # Create a new event loop for the current thread if necessary
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                raise RuntimeError("The event loop is closed")
+        except RuntimeError as e:
+            logger.info("Creating a new event loop: %s", e)
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+        # Now you can run your async code using the loop
+        trakt_history = retrieve_trakt_history(trakt_username)  # Assuming this is synchronous
+        final_df = loop.run_until_complete(main(trakt_history))
+
+        # Proceed with your synchronous code
+        print(final_df.head())
+        send_df_to_mysql(final_df, trakt_username)
+
+        return "Successfully sent dataframe to MySQL DB.", True, "Data processed for user: " + trakt_username, "No additional info."
+    except Exception as e:
+        logger.error("An error occurred in the login pipeline for %s: %s", trakt_username, e, exc_info=True)
+        return f"Failed to process data for {trakt_username}: {str(e)}", False, '', "Error occurred during processing."
+    finally:
+        # It's a good practice to close the loop at the end if you created a new one
+        if loop and not loop.is_running():
+            loop.close()

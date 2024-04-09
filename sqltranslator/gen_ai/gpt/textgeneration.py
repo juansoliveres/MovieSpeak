@@ -16,7 +16,7 @@ class TextGeneratorGPT3_5:
     """
     A class for generating text using GPT-3.5 language model.
 
-    The `TextBisonGPT` class provides a method called `predict` for generating text based
+    The `TextGeneratorGPT3_5` class provides a method called `predict` for generating text based
     on a given input prompt.
     That method uses a set of parameters to control the level of randomness
     and conservatism in the generated text, such as `temperature`, `max_tokens`, and `top_p`.
@@ -35,6 +35,7 @@ class TextGeneratorGPT3_5:
         self,
         text: str,
         text_examples: str,
+        trakt_username: str,
         max_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
         top_p: float = DEFAULT_TOP_P,
@@ -66,6 +67,7 @@ class TextGeneratorGPT3_5:
             question=text,
             text_examples=text_examples,
             input_sep=input_sep,
+            trakt_username = trakt_username,
         )
         print(prompt)
 
