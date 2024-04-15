@@ -1,0 +1,51 @@
+/* Add a background color and center the content */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000; /* Black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* Style the form */
+form {
+    background: #1C1C1C;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 300px;
+}
+
+/* Style the label and input field */
+label {
+    color: white;
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 3px;
+}
+
+/* Style the submit button */
+button {
+    background-color: #E50914; /* Netflix red */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #f40612;
+}

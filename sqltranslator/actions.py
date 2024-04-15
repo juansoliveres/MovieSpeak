@@ -5,7 +5,7 @@ from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.timezone import now
 
-from sqltranslator.gen_ai.pipelines import pipeline, pipelines_login
+from sqltranslator.gen_ai.pipelines import pipeline, pipeline_GPT4, pipelines_login
 
 """ def _run_sql_pipeline(
     request: HttpRequest, input_query: str
@@ -18,6 +18,13 @@ def _run_sql_pipeline(request: HttpRequest, input_query: str) -> Tuple[str, bool
     trakt_username = request.session.get('trakt_username')
     
     response, is_valid, sql, prompt = pipeline(input_query=input_query, trakt_username=trakt_username)
+    return response, is_valid, sql
+
+def _run_sql_pipeline_GPT4(request: HttpRequest, input_query: str) -> Tuple[str, bool, str]:
+    # Retrieve trakt_username from session
+    trakt_username = request.session.get('trakt_username')
+    
+    response, is_valid, sql, prompt = pipeline_GPT4(input_query=input_query, trakt_username=trakt_username)
     return response, is_valid, sql
 
 def run_login_pipeline(trakt_username: str) -> Tuple[str, bool, str, str]:

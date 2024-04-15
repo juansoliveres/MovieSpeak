@@ -1,7 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
 
-from sqltranslator.actions import _run_sql_pipeline, run_login_pipeline
+from sqltranslator.actions import _run_sql_pipeline, _run_sql_pipeline_GPT4, run_login_pipeline
 
 class IndexView(View):
     def get(self, request):
@@ -11,7 +11,7 @@ class IndexView(View):
         # handle POST request here
         input_query: str = request.POST["input_text"]
         # do something with input_text
-        output_text, is_valid, sql_query = _run_sql_pipeline(
+        output_text, is_valid, sql_query = _run_sql_pipeline_GPT4(
             request=request, input_query=input_query
         )
         return render(

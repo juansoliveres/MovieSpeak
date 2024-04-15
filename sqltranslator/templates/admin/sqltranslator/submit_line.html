@@ -1,0 +1,11 @@
+{% extends "admin/submit_line.html" %}
+
+{% block extra-actions %}
+    {{ block.super }}
+    {# Your additional content goes here #}
+    {% if original %}
+        <div class="form-group">
+            <input type="submit" class="btn btn-outline-info form-control" value="Save & Run" name="_run-model">
+        </div>
+    {% endif %}
+{% endblock %}

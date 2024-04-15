@@ -3,7 +3,7 @@ from functools import cached_property
 from typing import Any, Dict, List, Literal, Optional, Union
 from jinja2 import Template
 from sqltranslator.gen_ai.config import DEFAULT_EXAMPLES_SEPARATOR
-from sqltranslator.gen_ai.prompt.templates import BIGQUERY_SQL
+from sqltranslator.gen_ai.prompt.templates import BIGQUERY_SQL, SQL_WITH_ERROR_FIX
 
 def prompt_sql_generator(
     question: str,

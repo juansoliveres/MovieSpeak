@@ -38,7 +38,7 @@ Translate the text to SQL query based on the table and columns. Print just the S
 """
 
 SQL_WITH_ERROR_FIX = """\
-This is the original SQL query:
+This is the original PostgresSQL query:
 {{ sep }}
 {{ original_sql }}
 {{ sep }}
@@ -46,7 +46,7 @@ This is the error message obtained when running the original SQL query:
 {{ sep }}
 {{ error_msg }}
 {{ sep }}
-Rewrite the original SQL query to fix the error. Output just the new SQL.
+Rewrite the original SQL query to fix the error. OUTPUT JUST THE NEW SQL, IT MUST EXECUTABLE IN POSTGRESQL.
 """
 
 SQL_RETRY = """\
@@ -61,9 +61,13 @@ If the reference SQL is not correct, output the fixed SQL.
 """
 
 BIGQUERY_SQL = """\
-I have a table called {{ trakt_username }} in MySQL. This is the schema of the table as described by MySQL:
+I have a table called {{ trakt_username }} in PostgreSQL. This is the schema of the table as condensed as JSON:
 {{ schema }}
-I will give you a question asked in a natural language, and you will traduce that question into a MySQL code and nothing else, based on the schema of the table.
+I will give you a question asked in a natural language, and you will traduce that question into a PostgreSQL code and nothing else, based on the schema of the table.
+You need to take into account the following information:
+- Columns genres and actors are of type array. When asked about who is the actor/genre which appears in most movies you need
+to apply the UNNEST function to separate the items inside the array and compute its individual occurences, not as a group. 
+- All genres are written in lowercase, so when asked about genres always use lowercase to write them.
 ============
 question: {{ question }}
 """

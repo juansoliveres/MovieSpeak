@@ -13,8 +13,10 @@ HEADERS = {
 }
 
 MYSQL_ENGINE_URL = "mysql+mysqlconnector://root:mysqlPasswordy67@localhost:3306/test"
+POSTGRESQL_ENGINE_URL = "postgresql+psycopg2://postgres:master_password@localhost/moviedatabase"
 
-GPT3_5 = "gpt-3.5-turbo-1106"
+GPT3_5 = "gpt-3.5-turbo"
+GPT_4 = "gpt-4"
 
 #OPENAI_API_KEY = "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"
 OPENAI_API_KEY = "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"

@@ -1,0 +1,139 @@
+textarea {
+    width: calc(100% - 24px); /* Adjust width to account for padding */
+    height: 150px; /* Height adjusted */
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 1px solid #555; /* Subtle border color */
+    border-radius: 4px;
+    background-color: #222; /* Darker textarea background */
+    font-size: 16px;
+    color: white; /* Text color for readability */
+    resize: none;
+}
+
+#pop-up-message {
+    display: none;
+    position: absolute;
+    background-color: #333; /* Darker background for pop-up */
+    color: white; /* Color of the text inside the pop-up */
+    border: 1px solid #444; /* Subtle border for the pop-up */
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.sql-popup {
+    width: 400px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #333;
+    display: none;
+    padding: 20px;
+}
+
+.sql-popup .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.sql-popup .close-button:hover {
+    color: #333;
+}
+
+.sql-popup h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.sql-popup p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.sql-popup button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.sql-popup button:hover {
+    background-color: #45a049;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000; /* Black background */
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    background: #1C1C1C;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    margin: 10px 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #E50914; /* Netflix red */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px; /* Add some space between buttons */
+}
+
+button:hover {
+    background-color: #f40612;
+}
+
+/* Add a subtle animation for the popup */
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* You might want to add some global padding for all elements or other specific styles to further match the design */

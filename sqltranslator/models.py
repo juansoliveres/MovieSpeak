@@ -65,7 +65,7 @@ class GPTBase(models.Model):
     class Meta:
         abstract = True
 
-class GPT(GPTBase):
+class GPT3_5(GPTBase):
     name = models.CharField(
         max_length=255,
         unique=True,
@@ -82,5 +82,25 @@ class GPT(GPTBase):
     )
 
     class Meta:
-        verbose_name_plural = "CodeySQL"
+        verbose_name_plural = "GPT3_5"
+        app_label = 'sqltranslator'
+
+class GPT_4(GPTBase):
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+        help_text="A unique name to identify this query.",
+        default=uuid4_sql_gen,
+    )
+    query_result = RichTextField(
+        help_text="The result of the query over the table", null=True, blank=True
+    )
+    query_is_valid = models.BooleanField(
+        null=True,
+        blank=True,
+        help_text="If the predicted query has been successfully executed.",
+    )
+
+    class Meta:
+        verbose_name_plural = "GPT_4"
         app_label = 'sqltranslator'

@@ -18,7 +18,7 @@ def retrieve_trakt_history(trakt_user_name):
         user_rating.append(movie['rating'])
 
     data_tuples = list(zip(titles,imdb_id,user_rating))
-    title_imdbid = pd.DataFrame(data_tuples, columns=['Title','IMDB_id','User_rating'])
+    title_imdbid = pd.DataFrame(data_tuples, columns=['title','imdb_id','user_rating'])
     title_imdbid = title_imdbid.dropna()
     return title_imdbid
 
@@ -38,8 +38,8 @@ async def main(title_imdbid):
     connector = aiohttp.TCPConnector(ssl=ssl_context)
     async with aiohttp.ClientSession(connector=connector) as session:
     # async with aiohttp.ClientSession() as session:
-        details_tasks = [fetch_movie_details(session, movieid) for movieid in title_imdbid['IMDB_id']]
-        people_tasks = [fetch_movie_people(session, movieid) for movieid in title_imdbid['IMDB_id']]
+        details_tasks = [fetch_movie_details(session, movieid) for movieid in title_imdbid['imdb_id']]
+        people_tasks = [fetch_movie_people(session, movieid) for movieid in title_imdbid['imdb_id']]
         
         # print(details_tasks)
         # print(people_tasks)
