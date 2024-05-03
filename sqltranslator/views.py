@@ -11,9 +11,9 @@ class IndexView(View):
         # handle POST request here
         input_query: str = request.POST["input_text"]
         # do something with input_text
-        output_text, is_valid, sql_query = _run_sql_pipeline_GPT4(
+        output_text, is_valid, sql_query, tmdb_ids = _run_sql_pipeline_GPT4(
             request=request, input_query=input_query
-        )
+        )           
         return render(
             request,
             "sqltranslator/index.html",
@@ -22,6 +22,7 @@ class IndexView(View):
                 "input_text": input_query,
                 "is_valid": is_valid,
                 "sql_query": sql_query,
+                "tmdb_ids": tmdb_ids,
             },
         )
 

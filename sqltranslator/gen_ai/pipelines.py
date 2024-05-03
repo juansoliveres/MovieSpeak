@@ -11,7 +11,9 @@ from sqltranslator.gen_ai.trakt.trakt_functions_optimized import retrieve_trakt_
 from sqltranslator.gen_ai.gpt.textgeneration import TextGeneratorGPT3_5, TextGeneratorGPT4
 from sqltranslator.gen_ai.mysql.mysql_interactions import send_df_to_mysql, query_mysql, get_full_table_schema
 from sqltranslator.gen_ai.mysql.postgresql_interactions import query_postgresql, get_postgresql_table_schema, execute_postgresql_command, send_df_to_postgresql
+from sqltranslator.gen_ai.tmdb.gettmdb_id import get_tmdb_id
 from openai import OpenAI
+import pandas as pd
 
 def pipeline(input_query: str, trakt_username: str) -> Tuple[str, bool, str, str]:
     """
@@ -95,11 +97,13 @@ def pipeline_GPT4(input_query: str, trakt_username: str) -> Tuple[str, bool, str
         trakt_username = trakt_username,
         # extract_sql=True,
     )
+    # pd.set_option('display.max_columns', None)
 
     final_response, is_valid, sql_query = query_postgresql(reference_sql)
 
     if is_valid == True:
-        return final_response, is_valid, sql_query, prompt
+        tmdb_ids = get_tmdb_id(final_response, trakt_username)
+        return final_response, is_valid, sql_query, prompt, tmdb_ids
     
     elif not is_valid:
         # final_response will be equal to the error
@@ -109,7 +113,8 @@ def pipeline_GPT4(input_query: str, trakt_username: str) -> Tuple[str, bool, str
             error_msg = final_response,
             )
         final_response, is_valid, sql_query = query_postgresql(improved_sql)
-        return final_response, is_valid, sql_query, fix_prompt
+        tmdb_ids = get_tmdb_id(final_response, trakt_username)
+        return final_response, is_valid, sql_query, fix_prompt, tmdb_ids
 
 
 logging.basicConfig(level=logging.INFO)
@@ -170,11 +175,11 @@ def pipelines_login(trakt_username: str) -> Tuple[str, bool, str, str]:
         try: 
             execute_postgresql_command(alter_genres)
             execute_postgresql_command(alter_actors)
-            return True
+
+            return "Successfully sent dataframe to MySQL DB.", True, "Data processed for user: " + trakt_username
         except Exception as e:
             return('The command was not succesfully executed') 
         
-        return "Successfully sent dataframe to MySQL DB.", True, "Data processed for user: " + trakt_username, "No additional info."
     except Exception as e:
         logger.error("An error occurred in the login pipeline for %s: %s", trakt_username, e, exc_info=True)
         return f"Failed to process data for {trakt_username}: {str(e)}", False, '', "Error occurred during processing."

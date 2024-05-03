@@ -79,16 +79,16 @@ textarea {
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #000; /* Black background */
-    color: white;
-    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: white;
+    font-family: Arial, sans-serif;
 }
 
 h1 {
@@ -136,4 +136,60 @@ button:hover {
     }
 }
 
-/* You might want to add some global padding for all elements or other specific styles to further match the design */
+#movie-images-container {
+    overflow: hidden;  /* Hide the overflow */
+    display: flex;
+    white-space: nowrap;
+    width: 780px; /* Example: Adjust this based on total width of 5 images */
+    background-color: #141414;
+    padding: 20px 0; 
+    position: relative; /* Necessary for absolute positioning of arrows */
+}
+
+#scroll-right {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background-color: #E50914;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 15px;
+    font-size: 20px;
+    z-index: 10;
+}
+
+#scroll-left {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background-color: #E50914;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 15px;
+    font-size: 20px;
+    z-index: 10;
+    display: none; /* Initially hidden */
+}
+
+img {
+    transition: transform 300ms ease-in-out; /* Smooth transformation on hover */
+    width: 150px;
+    margin:15px;
+}
+
+img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+#logo {
+	margin: auto;
+    width: 300px;
+    position:relative;
+    top: 50px;
+}

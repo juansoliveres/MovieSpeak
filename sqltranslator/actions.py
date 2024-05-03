@@ -24,8 +24,8 @@ def _run_sql_pipeline_GPT4(request: HttpRequest, input_query: str) -> Tuple[str,
     # Retrieve trakt_username from session
     trakt_username = request.session.get('trakt_username')
     
-    response, is_valid, sql, prompt = pipeline_GPT4(input_query=input_query, trakt_username=trakt_username)
-    return response, is_valid, sql
+    response, is_valid, sql, prompt, tmdb_ids = pipeline_GPT4(input_query=input_query, trakt_username=trakt_username)
+    return response, is_valid, sql, tmdb_ids
 
 def run_login_pipeline(trakt_username: str) -> Tuple[str, bool, str, str]:
     try:

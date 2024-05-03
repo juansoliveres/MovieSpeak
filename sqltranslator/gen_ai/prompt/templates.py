@@ -63,7 +63,7 @@ If the reference SQL is not correct, output the fixed SQL.
 BIGQUERY_SQL = """\
 I have a table called {{ trakt_username }} in PostgreSQL. This is the schema of the table as condensed as JSON:
 {{ schema }}
-I will give you a question asked in a natural language, and you will traduce that question into a PostgreSQL code and nothing else, based on the schema of the table.
+I will give you a question asked in a natural language, and you will traduce that question into EXECUTABLE POSTGRESQL CODE AND NOTHING ELSE, based on the schema of the table.
 You need to take into account the following information:
 - Columns genres and actors are of type array. When asked about who is the actor/genre which appears in most movies you need
 to apply the UNNEST function to separate the items inside the array and compute its individual occurences, not as a group. 
@@ -72,32 +72,3 @@ to apply the UNNEST function to separate the items inside the array and compute 
 question: {{ question }}
 """
 
-BIGQUERY_SQL_BASE = """\
-{% if examples|length == 1 %}\
-{% set table_name = examples[0].name %}\
-{% set table_schema_dict = examples[0].schema %}\
-I have a table called `{{ table_name }}` in BigQuery. This is the schema of the table condensed as JSON:
-{{ table_schema_dict }}
-I will give you a question asked in a natural language, and you will traduce that question into a BigQuery SQL code and nothing else, based on the schema of the table.
-{% elif examples|length > 1 %}\
-{% set table_name = examples[0].name %}\
-I have several tables stored in BigQuery. I am going to pass you below, for each table, its name and schema, condensed as JSON:
-{% for example in examples %}\
-Table name: `{{ example.name }}`
-Table schema: {{ example.schema }}
-{% endfor %}\
-I will give you a question asked in a natural language, and you will traduce that question into a BigQuery SQL code and nothing else, based on the name and schema of the tables.
-{% else %}\
-{{ error() }}
-{% endif %}\
-You have to take into account the following caveats:
-- The conversion rate is defined as the ratio of the sum of gross policies to the sum of completed quotes, multiplied by 100 to return a percentage.
-Examples: question: show me the first 5 registries of {{ table_name }}.
-answer: SELECT * FROM `{{ table_name }}` LIMIT 5;
-question: what is the conversion rate registered on February?
-answer: SELECT SUM({{ translation_names.NUM_POL_BRUTAS_NB }}) / SUM({{ translation_names.NUM_COT_COMP_NB }}) * 100 AS conversion_rate FROM `pruebasverti01.cotizaciones_polizas` WHERE EXTRACT(MONTH FROM {{ translation_names.FEC_DATA }}) = 2;
-question: Out of all annulments, what percentage of them have been made with validity?
-answer: SELECT SUM(CASE WHEN {{ translation_names.TIPOANUL }} = '{{ translation_values.ANULCONV }}' THEN {{ translation_names.NUM_MOVIMIENTOS }} ELSE 0 END) / SUM(CASE WHEN {{ translation_names.TIPOANUL }} IS NOT NULL THEN {{ translation_names.NUM_MOVIMIENTOS }} ELSE 0 END ) * 100 AS percentage_of_annulments_with_validity FROM `pruebasverti01.movimientos`;
-============
-question: {{ question }}
-"""

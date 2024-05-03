@@ -11,14 +11,15 @@ def retrieve_trakt_history(trakt_user_name):
     response = requests.get(f"https://api.trakt.tv/users/{trakt_user_name}/ratings/movies", headers = HEADERS)
     data = response.json()
     
-    titles, imdb_id, user_rating = ([] for _ in range(3))  
+    titles, imdb_id, tmdb_id, user_rating = ([] for _ in range(4))  
     for movie in data:
         titles.append(movie['movie']['title'])
         imdb_id.append(movie['movie']['ids']['imdb'])
+        tmdb_id.append(movie['movie']['ids']['tmdb'])
         user_rating.append(movie['rating'])
 
-    data_tuples = list(zip(titles,imdb_id,user_rating))
-    title_imdbid = pd.DataFrame(data_tuples, columns=['title','imdb_id','user_rating'])
+    data_tuples = list(zip(titles,imdb_id,tmdb_id,user_rating))
+    title_imdbid = pd.DataFrame(data_tuples, columns=['title','imdb_id','tmdb_id','user_rating'])
     title_imdbid = title_imdbid.dropna()
     return title_imdbid
 
@@ -80,9 +81,10 @@ async def main(title_imdbid):
             for actor in people['cast'][0:5]:
                 actors_list.append(actor['person']['name'])
             actors.append(actors_list)            
-            
+
             directors_list = [] 
             for movie in people['crew']['directing']:
+                #print(movie)
                 if movie['job'] == 'Director':
                     directors_list.append(movie['person']['name'])
             directors.append(directors_list)

@@ -4,7 +4,7 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style_questionspage.css' %}">
-    <title>VertiAI</title>
+    <title>MovieSpeak</title>
     <script>
         function openSQLPopup() {
             document.getElementById("sql-popup").style.display = "block";
@@ -32,7 +32,8 @@
 </head>
 
 <body>
-    <h1 style="text-align:center;">Natural Language Questions</h1>
+    <img src="../../static/images/MovieSpeak_red.png" alt="Logo" id="logo">
+    <!-- <h1 style="text-align:center;">Natural Language Questions</h1> -->
     <form method="post" action="{% url 'index' %}">
         {% csrf_token %}
         <label for="input_text">Input Text:</label><br>
@@ -54,9 +55,13 @@
         style="color:red" {% endif %}>{{ output_text }}</textarea>
 
     <div id="pop-up-message">Enter your question here in natural language.</div>
-    <div id="movie-images-container">
-        <!-- Movie images will be added here by JavaScript -->
-    </div>
+    <div id="movie-images-container"></div>
+    <button id="scroll-right" style="position: absolute; top: 50%; right: 0; transform: translateY(-50%);">→</button>
+    <button id="scroll-left" style="position: absolute; top: 50%; left: 0; transform: translateY(-50%);">←</button>
+    <script>
+        // Access the variable passed from Django view
+        var tmdb_ids = "{{ tmdb_ids }}";
+    </script>
     <script type="text/javascript" src="{% static 'js/images.js' %}"></script>
 </body>
 
